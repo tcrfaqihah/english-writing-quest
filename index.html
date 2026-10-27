@@ -37,22 +37,12 @@
       transform: translate(3px, 3px);
       box-shadow: 1px 1px 0px #000;
     }
-    .brick-pattern {
-      background-color: #d04648;
-      background-image: linear-gradient(335deg, #b03032 23px, transparent 23px),
-                        linear-gradient(155deg, #b03032 23px, transparent 23px);
-      background-size: 58px 58px;
-    }
     .coin-anim {
       animation: floatCoin 1s ease-in-out infinite alternate;
     }
     @keyframes floatCoin {
       0% { transform: translateY(0px); }
       100% { transform: translateY(-8px); }
-    }
-    .pipe-green {
-      background: linear-gradient(90deg, #00a800 0%, #00e800 50%, #00a800 100%);
-      border: 3px solid #000;
     }
   </style>
 </head>
@@ -113,6 +103,11 @@
         </div>
       </div>
 
+      <!-- Custom Alert Box -->
+      <div id="welcome-alert" class="hidden mt-4 max-w-md mx-auto p-3 rounded-lg border-2 border-red-500 bg-red-100 text-red-800 text-xs font-bold font-retro">
+        ⚠️ Please enter your name and select a class to start!
+      </div>
+
       <!-- Instructions Box -->
       <div class="mt-6 max-w-md mx-auto text-left bg-blue-50 p-4 rounded-xl border-2 border-blue-400">
         <h3 class="font-retro text-xs text-blue-800 mb-2 flex items-center gap-2">
@@ -160,7 +155,7 @@
       <div id="fill-feedback" class="hidden p-3 rounded-lg border-2 font-semibold text-center text-sm mb-4"></div>
 
       <div class="flex justify-end">
-        <button id="btn-next-fill" onclick="nextFillQuestion()" class="mario-btn bg-yellow-400 hover:bg-yellow-500 text-black font-retro px-6 py-3 rounded-xl text-xs sm:text-sm hidden items-center gap-2">
+        <button id="btn-next-fill" onclick="nextFillQuestion()" class="mario-btn bg-yellow-400 hover:bg-yellow-500 text-black font-retro px-6 py-3 rounded-xl text-xs sm:text-sm hidden items-center gap-2 cursor-pointer">
           <span>NEXT NOTE</span>
           <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -181,21 +176,84 @@
       </div>
 
       <!-- Instructions & Actions -->
-      <div class="flex justify-between items-center mb-3">
-        <span class="text-xs font-bold text-gray-600"><i class="fa-solid fa-hand-pointer text-purple-600"></i> Click a sentence to select, then click another to swap positions:</span>
-        <button onclick="resetEssayOrder()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1 rounded border border-black">
-          <i class="fa-solid fa-rotate-left"></i> Reset
+      <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
+        <span class="text-xs font-bold text-gray-600"><i class="fa-solid fa-hand-pointer text-purple-600"></i> Click a sentence block to select, then click another to swap positions:</span>
+        <button onclick="resetEssayOrder()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1 rounded border border-black cursor-pointer">
+          <i class="fa-solid fa-rotate-left"></i> Reset Order
         </button>
       </div>
 
-      <!-- Sentence Blocks (Rearrange Container) -->
+      <!-- Sentence Blocks Container -->
       <div id="essay-blocks" class="space-y-3 mb-6">
         <!-- Dynamically Generated Sentence Blocks -->
       </div>
 
+      <div id="essay-feedback" class="hidden p-3 rounded-lg border-2 font-semibold text-center text-sm mb-4"></div>
+
       <div class="flex justify-between items-center">
-        <button onclick="checkEssayOrder()" class="mario-btn bg-green-500 hover:bg-green-600 text-white font-retro px-6 py-3 rounded-xl text-xs sm:text-sm inline-flex items-center gap-2">
+        <button onclick="checkEssayOrder()" class="mario-btn bg-green-500 hover:bg-green-600 text-white font-retro px-6 py-3 rounded-xl text-xs sm:text-sm inline-flex items-center gap-2 cursor-pointer">
           <i class="fa-solid fa-check"></i>
+          <span>CHECK ESSAY ORDER</span>
+        </button>
+        <button id="btn-next-essay" onclick="nextEssay()" class="mario-btn bg-yellow-400 hover:bg-yellow-500 text-black font-retro px-6 py-3 rounded-xl text-xs sm:text-sm hidden items-center gap-2 cursor-pointer">
+          <span>NEXT ESSAY</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 4: VICTORY / FINAL SCOREBOARD ================= -->
+    <section id="stage-victory" class="mario-card w-full p-6 sm:p-8 rounded-2xl bg-white text-center hidden">
+      <div class="bg-yellow-400 text-black py-3 px-6 -mx-8 -mt-8 mb-6 border-b-4 border-black flex justify-center items-center gap-2">
+        <i class="fa-solid fa-trophy text-red-600 text-xl"></i>
+        <h2 class="font-retro text-lg sm:text-xl">QUEST COMPLETED!</h2>
+      </div>
+
+      <div class="mb-6">
+        <p class="font-fun text-3xl text-green-600 mb-1">CONGRATULATIONS!</p>
+        <p class="text-gray-600 font-medium">You have mastered Note Expansion & Essay Writing for Form 3!</p>
+      </div>
+
+      <!-- Score Card -->
+      <div class="max-w-md mx-auto bg-yellow-50 border-4 border-black rounded-xl p-6 mb-6 space-y-3 font-retro text-xs sm:text-sm text-left">
+        <div class="flex justify-between border-b-2 border-gray-300 pb-2">
+          <span class="text-gray-600">PLAYER HERO:</span>
+          <span id="final-name" class="font-bold text-black">---</span>
+        </div>
+        <div class="flex justify-between border-b-2 border-gray-300 pb-2">
+          <span class="text-gray-600">CLASS:</span>
+          <span id="final-class" class="font-bold text-blue-600">---</span>
+        </div>
+        <div class="flex justify-between border-b-2 border-gray-300 pb-2">
+          <span class="text-gray-600">FILL-IN SCORE:</span>
+          <span id="final-fill-score" class="font-bold text-green-600">0/15</span>
+        </div>
+        <div class="flex justify-between border-b-2 border-gray-300 pb-2">
+          <span class="text-gray-600">ESSAY SCORE:</span>
+          <span id="final-essay-score" class="font-bold text-purple-600">0/8</span>
+        </div>
+        <div class="flex justify-between text-base pt-2 text-red-600">
+          <span>TOTAL COINS:</span>
+          <span id="final-score" class="font-bold text-yellow-600">0</span>
+        </div>
+        <div class="mt-4 pt-3 border-t-2 border-black text-center bg-yellow-200 p-2 rounded">
+          <span class="block text-gray-700 text-[10px] mb-1">EARNED RANK:</span>
+          <span id="final-rank" class="text-xs sm:text-sm font-bold text-purple-800">ESSAY MASTER</span>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-4 flex-wrap">
+        <button onclick="location.reload()" class="mario-btn bg-blue-500 hover:bg-blue-600 text-white font-retro px-6 py-3 rounded-xl text-xs sm:text-sm inline-flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span>PLAY AGAIN</span>
+        </button>
+        <button onclick="toggleTeacherDashboard()" class="mario-btn bg-purple-600 hover:bg-purple-700 text-white font-retro px-6 py-3 rounded-xl text-xs sm:text-sm inline-flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-clipboard-user"></i>
+          <span>VIEW RECORDS</span>
+        </button>
+      </div>
+    </section>
+
     <!-- ================= TEACHER DASHBOARD MODAL ================= -->
     <div id="teacher-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
       <div class="mario-card bg-white w-full max-w-3xl rounded-2xl p-6 relative max-h-[90vh] flex flex-col">
@@ -203,13 +261,13 @@
           <h3 class="font-retro text-sm sm:text-base flex items-center gap-2">
             <i class="fa-solid fa-graduation-cap text-yellow-300"></i> TEACHER RECORDS DASHBOARD
           </h3>
-          <button onclick="toggleTeacherDashboard()" class="text-white hover:text-red-300 font-bold text-xl">&times;</button>
+          <button onclick="toggleTeacherDashboard()" class="text-white hover:text-red-300 font-bold text-xl cursor-pointer">&times;</button>
         </div>
 
         <div class="flex flex-wrap justify-between items-center my-2 gap-2 text-xs font-semibold">
           <p class="text-gray-600">Track student quest completions and performance scores in real-time.</p>
           <div class="flex gap-2">
-            <button onclick="clearStudentRecords()" class="bg-red-500 text-white px-3 py-1.5 rounded border border-black font-retro hover:bg-red-600">
+            <button onclick="clearStudentRecords()" class="bg-red-500 text-white px-3 py-1.5 rounded border border-black font-retro hover:bg-red-600 cursor-pointer">
               <i class="fa-solid fa-trash"></i> CLEAR ALL
             </button>
           </div>
@@ -235,7 +293,7 @@
         </div>
 
         <div class="text-right">
-          <button onclick="toggleTeacherDashboard()" class="mario-btn bg-gray-600 hover:bg-gray-700 text-white font-retro text-xs px-5 py-2.5 rounded-lg">
+          <button onclick="toggleTeacherDashboard()" class="mario-btn bg-gray-600 hover:bg-gray-700 text-white font-retro text-xs px-5 py-2.5 rounded-lg cursor-pointer">
             CLOSE RECORDS
           </button>
         </div>
@@ -254,10 +312,62 @@
     </div>
   </footer>
 
-  <!-- AUDIO SYNTH (Web Audio API for Retro Sound Effects) -->
+  <!-- JAVASCRIPT LOGIC & AUDIO SYNTH -->
   <script>
-    // ... existing audio code ...
-    // GAME STATE & DATA
+    // WEB AUDIO API SOUND SYNTHESIZER
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+
+    function playSound(type) {
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'coin') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(987.77, ctx.currentTime); // B5
+          osc.frequency.setValueAtTime(1318.51, ctx.currentTime + 0.08); // E6
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.3);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(150, ctx.currentTime);
+          osc.frequency.setValueAtTime(110, ctx.currentTime + 0.1);
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+          osc.start(ctx.currentTime);
+          osc.stop(ctx.currentTime + 0.25);
+        } else if (type === 'win') {
+          const now = ctx.currentTime;
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+          osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+          osc.start(now);
+          osc.stop(now + 0.6);
+        }
+      } catch (e) {
+        // Audio synthesis fallback
+      }
+    }
+
+    // GAME STATE
     let gameState = {
       playerName: '',
       playerClass: '',
@@ -268,10 +378,9 @@
       currentEssayIdx: 0
     };
 
-    // Teacher records local storage array
     let teacherRecords = [];
 
-    // Stage 2 Questions: 15 Note Expansion Questions for Form 3
+    // STAGE 2 QUESTIONS: 15 Form 3 Note Expansion Items
     const fillQuestions = [
       {
         notes: "receive gift -> last birthday -> brand new smartphone",
@@ -297,7 +406,7 @@
           "play badminton to local community centre"
         ],
         correct: 1,
-        explanation: "The verb 'enjoy' is followed by a gerund ('playing'), and 'at' is the correct preposition for the location."
+        explanation: "The verb 'enjoy' is followed by a gerund ('playing'), and 'at' is the correct preposition for location."
       },
       {
         notes: "suddenly -> hear loud crash -> look outside",
@@ -310,7 +419,7 @@
           "I hear loud crash suddenly"
         ],
         correct: 0,
-        explanation: "'Suddenly heard' uses the past simple to interrupt a continuous action ('was studying')."
+        explanation: "'Suddenly heard' uses simple past to interrupt a continuous past action ('was studying')."
       },
       {
         notes: "useful tool -> online studies -> contact friends",
@@ -336,7 +445,7 @@
           "ambulance was arrive and paramedics treating victim to send"
         ],
         correct: 0,
-        explanation: "Proper sequence of past actions requires consistent past tense verbs ('arrived', 'treated')."
+        explanation: "Proper sequence of past actions requires consistent simple past tense verbs."
       },
       {
         notes: "heavy rain -> flash flood -> trap residents",
@@ -414,7 +523,7 @@
           "mother was prepare delicious meal"
         ],
         correct: 0,
-        explanation: "Time marker 'Last night' indicates past tense verb 'prepared'."
+        explanation: "Time marker 'Last night' indicates past simple verb 'prepared'."
       },
       {
         notes: "cautious -> cross road -> look left and right",
@@ -470,11 +579,10 @@
       }
     ];
 
-    // Stage 3 Essays: 8 Topics (~120 words each, split into 5 orderable paragraph chunks)
+    // STAGE 3 ESSAYS: 8 Form 3 Essays (~120 words each)
     const essaysData = [
       {
         title: "1. My First Smartphone",
-        correctOrder: [0, 1, 2, 3, 4],
         chunks: [
           "On my fourteenth birthday, my parents surprised me with a sleek black smartphone as a reward for achieving excellent results in my exams.",
           "I was overjoyed because I had been wishing for my own phone for a very long time.",
@@ -485,7 +593,6 @@
       },
       {
         title: "2. My Favourite Sport",
-        correctOrder: [0, 1, 2, 3, 4],
         chunks: [
           "Among all the physical activities I have tried, badminton is undeniably my absolute favourite sport.",
           "I play badminton every weekend at the neighborhood court together with my elder brother and close friends.",
@@ -496,7 +603,6 @@
       },
       {
         title: "3. An Unforgettable Accident",
-        correctOrder: [0, 1, 2, 3, 4],
         chunks: [
           "Last month, while walking home from school, I witnessed a terrifying road accident near the busy junction.",
           "A motorcyclist was riding at high speed when a car suddenly turned out from a side lane without signaling.",
@@ -507,7 +613,6 @@
       },
       {
         title: "4. Rescuing a Helpless Stray Animal",
-        correctOrder: [0, 1, 2, 3, 4],
         chunks: [
           "Last Tuesday afternoon, while returning from tuition class, I heard faint meowing sounds coming from a roadside drain.",
           "When I peered inside, I discovered a tiny kitten trapped in dirty mud, shivering cold and unable to climb out.",
@@ -518,7 +623,6 @@
       },
       {
         title: "5. My Dream Holiday in Langkawi",
-        correctOrder: [0, 1, 2, 3, 4],
         chunks: [
           "During the last school holidays, my family and I traveled to Langkawi Island for an exciting three-day vacation.",
           "We stayed at a cozy beach resort facing the crystal-clear ocean waters and soft white sands.",
@@ -529,7 +633,6 @@
       },
       {
         title: "6. A Meaningful School Clean-Up Day",
-        correctOrder: [0, 1, 2, 3, 4],
         chunks: [
           "Last Saturday, our school organised a massive Gotong-Royong activity to create a cleaner learning environment for all students.",
           "Early in the morning, students gathered at the school hall equipped with brooms, paintbrushes, and rubbish bags.",
@@ -540,7 +643,6 @@
       },
       {
         title: "7. An Unexpected Power Outage",
-        correctOrder: [0, 1, 2, 3, 4],
         chunks: [
           "It was a stormy Friday night when a sudden power outage plunged our entire neighborhood into pitch darkness.",
           "The heavy thunderstorm had caused a major blackout, leaving our family without electricity or air conditioning.",
@@ -551,7 +653,6 @@
       },
       {
         title: "8. My Best Friend's Surprise Birthday Party",
-        correctOrder: [0, 1, 2, 3, 4],
         chunks: [
           "Last weekend, my classmates and I planned a surprise birthday party for our best friend, Danish, at a local cafe.",
           "We secretly decorated the private room with colorful balloons, banners, and a delicious chocolate birthday cake.",
@@ -569,15 +670,14 @@
     function startQuest() {
       const nameInput = document.getElementById('player-name').value.trim();
       const classSelect = document.getElementById('player-class').value;
+      const alertBox = document.getElementById('welcome-alert');
 
-      if (!nameInput) {
-        alert('Please enter your Hero Name to start!');
+      if (!nameInput || !classSelect) {
+        alertBox.classList.remove('hidden');
         return;
       }
-      if (!classSelect) {
-        alert('Please select your Class to start!');
-        return;
-      }
+
+      alertBox.classList.add('hidden');
 
       gameState.playerName = nameInput;
       gameState.playerClass = classSelect;
@@ -599,7 +699,7 @@
       loadFillQuestion();
     }
 
-    // STAGE 2: Fill in blanks logic
+    // STAGE 2: Fill-in-the-blank logic
     function loadFillQuestion() {
       const q = fillQuestions[gameState.currentFillIdx];
       document.getElementById('fill-idx').innerText = gameState.currentFillIdx + 1;
@@ -607,6 +707,7 @@
       document.getElementById('sentence-before').innerText = q.before;
       document.getElementById('sentence-after').innerText = q.after;
       document.getElementById('current-blank').innerText = " [ ? ] ";
+      document.getElementById('current-blank').className = "inline-block border-b-4 border-dashed border-red-500 bg-red-50 px-3 py-1 font-bold text-red-600 rounded";
       
       const feedbackEl = document.getElementById('fill-feedback');
       feedbackEl.classList.add('hidden');
@@ -636,7 +737,6 @@
       const optionsContainer = document.getElementById('options-container');
       const optionButtons = optionsContainer.children;
 
-      // Disable all option buttons
       for (let btn of optionButtons) {
         btn.disabled = true;
         btn.classList.add('opacity-70', 'cursor-not-allowed');
@@ -664,7 +764,7 @@
         optionButtons[q.correct].classList.add('bg-green-100', 'border-green-600');
 
         feedbackEl.className = "p-3 rounded-lg border-2 border-red-500 bg-red-50 font-semibold text-center text-sm mb-4 text-red-800";
-        feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-600"></i> INCORRECT! <br><span class="text-xs font-normal">${q.explanation}</span>`;
+        feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-600"></i> INCORRECT!<br><span class="text-xs font-normal">${q.explanation}</span>`;
       }
 
       feedbackEl.classList.remove('hidden');
@@ -678,7 +778,6 @@
       if (gameState.currentFillIdx < fillQuestions.length) {
         loadFillQuestion();
       } else {
-        // Switch to Stage 3
         document.getElementById('stage-fill').classList.add('hidden');
         document.getElementById('stage-rearrange').classList.remove('hidden');
         loadEssayQuestion();
@@ -691,14 +790,15 @@
       document.getElementById('essay-num').innerText = gameState.currentEssayIdx + 1;
       document.getElementById('essay-title').innerText = essay.title;
 
-      // Scramble chunks deterministically
-      let indices = essay.chunks.map((_, i) => i);
-      indices = indices.reverse();
-      currentEssayState = indices.map(i => essay.chunks[i]);
+      // Scramble essay chunks deterministically (reverse order initially)
+      let originalChunks = [...essay.chunks];
+      currentEssayState = originalChunks.reverse();
       selectedBlockIdx = null;
 
-      document.getElementById('btn-next-essay').classList.add('hidden');
-      document.getElementById('btn-next-essay').classList.remove('inline-flex');
+      document.getElementById('essay-feedback').classList.add('hidden');
+      const btnNext = document.getElementById('btn-next-essay');
+      btnNext.classList.add('hidden');
+      btnNext.classList.remove('inline-flex');
 
       renderEssayBlocks();
     }
@@ -717,10 +817,10 @@
         
         div.innerHTML = `
           <div class="flex items-center gap-3">
-            <span class="font-retro text-xs bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full">${idx + 1}</span>
+            <span class="font-retro text-xs bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full shrink-0">${idx + 1}</span>
             <p class="text-sm sm:text-base text-gray-800 font-medium">${text}</p>
           </div>
-          <div class="text-purple-600 font-bold ml-2">
+          <div class="text-purple-600 font-bold ml-2 shrink-0">
             <i class="fa-solid ${isSelected ? 'fa-circle-check text-lg' : 'fa-arrows-up-down'}"></i>
           </div>
         `;
@@ -736,7 +836,6 @@
       } else if (selectedBlockIdx === idx) {
         selectedBlockIdx = null;
       } else {
-        // Swap elements
         const temp = currentEssayState[selectedBlockIdx];
         currentEssayState[selectedBlockIdx] = currentEssayState[idx];
         currentEssayState[idx] = temp;
@@ -761,21 +860,25 @@
         }
       }
 
+      const feedbackEl = document.getElementById('essay-feedback');
       if (isCorrect) {
         playSound('win');
         gameState.score += 200;
         gameState.essayCorrectCount++;
         document.getElementById('hud-score').innerText = gameState.score;
         
-        alert('✨ EXCELLENT! Essay structure is perfectly ordered! +200 COINS');
+        feedbackEl.className = "p-3 rounded-lg border-2 border-green-500 bg-green-50 font-semibold text-center text-sm mb-4 text-green-800";
+        feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check text-green-600"></i> EXCELLENT! Essay structure is perfectly ordered! +200 COINS`;
         
         const btnNext = document.getElementById('btn-next-essay');
         btnNext.classList.remove('hidden');
         btnNext.classList.add('inline-flex');
       } else {
         playSound('wrong');
-        alert('❌ The paragraph order is not quite right yet. Keep rearranging the sequence!');
+        feedbackEl.className = "p-3 rounded-lg border-2 border-red-500 bg-red-50 font-semibold text-center text-sm mb-4 text-red-800";
+        feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-600"></i> The paragraph order is not quite right yet. Keep rearranging the sequence!`;
       }
+      feedbackEl.classList.remove('hidden');
     }
 
     function nextEssay() {
@@ -794,6 +897,8 @@
 
       document.getElementById('final-name').innerText = gameState.playerName;
       document.getElementById('final-class').innerText = gameState.playerClass;
+      document.getElementById('final-fill-score').innerText = `${gameState.fillCorrectCount}/15`;
+      document.getElementById('final-essay-score').innerText = `${gameState.essayCorrectCount}/8`;
       document.getElementById('final-score').innerText = gameState.score;
 
       let rank = "ESSAY NOVICE";
@@ -802,8 +907,6 @@
       else if (gameState.score >= 1200) rank = "ADVANCED WRITER";
       
       document.getElementById('final-rank').innerText = rank;
-
-      // Save student record into Teacher Records
       saveStudentRecord();
     }
 
@@ -827,8 +930,7 @@
         class: gameState.playerClass,
         fillScore: `${gameState.fillCorrectCount}/15`,
         essayScore: `${gameState.essayCorrectCount}/8`,
-        totalScore: gameState.score,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        totalScore: gameState.score
       };
       teacherRecords.push(record);
     }
@@ -864,10 +966,8 @@
     }
 
     function clearStudentRecords() {
-      if (confirm("Are you sure you want to clear all student performance records?")) {
-        teacherRecords = [];
-        renderTeacherRecords();
-      }
+      teacherRecords = [];
+      renderTeacherRecords();
     }
   </script>
 </body>
