@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super English Quest - Form 3 Note Expansion</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Retro Arcade Gaming feel -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka+One&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #5c94fc;
+      background-image: radial-gradient(#70a4ff 20%, transparent 20%);
+      background-size: 20px 20px;
+    }
+    .font-retro {
+      font-family: 'Press Start 2P', cursive;
+    }
+    .font-fun {
+      font-family: 'Fredoka One', cursive;
+    }
+    .mario-card {
+      background: #ffffff;
+      border: 4px solid #000000;
+      box-shadow: 8px 8px 0px #000000;
+    }
+    .mario-btn {
+      border: 3px solid #000;
+      box-shadow: 4px 4px 0px #000;
+      transition: all 0.1s ease;
+    }
+    .mario-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px #000;
+    }
+    .brick-pattern {
+      background-color: #d04648;
+      background-image: linear-gradient(335deg, #b03032 23px, transparent 23px),
+                        linear-gradient(155deg, #b03032 23px, transparent 23px);
+      background-size: 58px 58px;
+    }
+    .coin-anim {
+      animation: floatCoin 1s ease-in-out infinite alternate;
+    }
+    @keyframes floatCoin {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-8px); }
+    }
+    .pipe-green {
+      background: linear-gradient(90deg, #00a800 0%, #00e800 50%, #00a800 100%);
+      border: 3px solid #000;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-gray-900 p-2 sm:p-4">
+
+  <!-- TOP HUD BAR -->
+  <header class="max-w-4xl mx-auto w-full mb-4">
+    <div class="mario-card bg-yellow-400 p-3 sm:p-4 flex flex-wrap justify-between items-center gap-2 rounded-xl font-retro text-xs sm:text-sm">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-user-ninja text-red-600 text-lg"></i>
+        <span id="hud-name" class="text-black">HERO: ---</span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-graduation-cap text-blue-700 text-lg"></i>
+        <span id="hud-class" class="text-black">CLASS: ---</span>
+      </div>
+      <div class="flex items-center space-x-2 bg-red-500 text-white px-3 py-1 rounded-full border-2 border-black">
+        <i class="fa-solid fa-coins text-yellow-300 coin-anim"></i>
+        <span>SCORE: <span id="hud-score">0</span></span>
+      </div>
+      <button onclick="toggleTeacherDashboard()" class="mario-btn bg-purple-600 hover:bg-purple-700 text-white text-xs px-3 py-1.5 rounded-lg font-retro flex items-center gap-1.5 cursor-pointer">
+        <i class="fa-solid fa-clipboard-user"></i>
+        <span>TEACHER RECORDS</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN STAGE CONTAINER -->
+  <main class="max-w-4xl mx-auto w-full flex-grow flex items-center justify-center">
+
+    <!-- ================= STAGE 1: WELCOME & CLASS SELECT ================= -->
+    <section id="stage-welcome" class="mario-card w-full p-6 sm:p-8 rounded-2xl bg-white text-center relative overflow-hidden">
+      <!-- Decorative Header -->
+      <div class="bg-red-500 text-white py-3 px-6 -mx-8 -mt-8 mb-6 border-b-4 border-black flex items-center justify-center gap-3">
+        <i class="fa-solid fa-gamepad text-2xl text-yellow-300"></i>
+        <h1 class="font-retro text-lg sm:text-xl tracking-wider">WORLD 1-1: START QUEST</h1>
+      </div>
+
+      <p class="font-fun text-2xl text-red-600 mb-2">Form 3 English: Note Expansion Mastery!</p>
+      <p class="text-gray-600 mb-6 text-sm sm:text-base">Level up your writing skills, collect coins, and complete all stages to become the Ultimate Essay Master!</p>
+
+      <!-- Player Info Form -->
+      <div class="max-w-md mx-auto space-y-4 text-left bg-yellow-50 p-5 rounded-xl border-2 border-black">
+        <div>
+          <label class="block font-retro text-xs text-gray-800 mb-2"><i class="fa-solid fa-pen text-red-500"></i> ENTER YOUR HERO NAME:</label>
+          <input type="text" id="player-name" placeholder="e.g. Ahmad Rayyan" class="w-full p-3 border-2 border-black rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-500">
+        </div>
+
+        <div>
+          <label class="block font-retro text-xs text-gray-800 mb-2"><i class="fa-solid fa-school text-blue-500"></i> SELECT YOUR CLASS:</label>
+          <select id="player-class" class="w-full p-3 border-2 border-black rounded-lg font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
+            <option value="" disabled selected>Choose Class...</option>
+            <option value="1 Ibnu Sina">1 Ibnu Sina</option>
+            <option value="1 Al Batani">1 Al Batani</option>
+            <option value="2 Al Farabi">2 Al Farabi</option>
+            <option value="3 Ibnu Sina">3 Ibnu Sina</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Instructions Box -->
+      <div class="mt-6 max-w-md mx-auto text-left bg-blue-50 p-4 rounded-xl border-2 border-blue-400">
+        <h3 class="font-retro text-xs text-blue-800 mb-2 flex items-center gap-2">
+          <i class="fa-solid fa-circle-info"></i> MISSION INSTRUCTIONS:
+        </h3>
+        <ul class="text-xs sm:text-sm text-gray-700 space-y-1.5 list-disc pl-4">
+          <li><strong>Stage 1 (Fill-In):</strong> Complete <strong>15 Note Expansion questions</strong> by selecting correct connectors, vocabulary, and tenses.</li>
+          <li><strong>Stage 2 (Essay Puzzle):</strong> Reorder scrambled sentences to reconstruct <strong>8 complete ~120-word Form 3 essays</strong>.</li>
+          <li>Earn <strong>100 Coins</strong> for each correct fill-in & <strong>200 Coins</strong> per essay!</li>
+        </ul>
+      </div>
+
+      <!-- Start Button -->
+      <button onclick="startQuest()" class="mt-6 mario-btn bg-green-500 hover:bg-green-600 text-white font-retro px-8 py-4 rounded-xl text-sm sm:text-base cursor-pointer inline-flex items-center gap-2">
+        <span>PRESS START TO PLAY</span>
+        <i class="fa-solid fa-play"></i>
+      </button>
+    </section>
+
+    <!-- ================= STAGE 2: FILL IN THE BLANKS ================= -->
+    <section id="stage-fill" class="mario-card w-full p-6 sm:p-8 rounded-2xl bg-white hidden">
+      <div class="bg-blue-600 text-white py-3 px-6 -mx-8 -mt-8 mb-6 border-b-4 border-black flex justify-between items-center">
+        <h2 class="font-retro text-sm sm:text-base"><i class="fa-solid fa-puzzle-piece"></i> WORLD 1-2: NOTE EXPANSION</h2>
+        <span class="font-retro text-xs bg-yellow-400 text-black px-2 py-1 rounded">QUESTION <span id="fill-idx">1</span>/15</span>
+      </div>
+
+      <!-- Note Prompt Box -->
+      <div class="bg-yellow-100 border-2 border-yellow-500 rounded-xl p-4 mb-6">
+        <span class="font-retro text-xs text-yellow-800 block mb-1">📝 GIVEN NOTES TO EXPAND:</span>
+        <p id="fill-notes" class="font-semibold text-gray-800 text-sm sm:text-base"></p>
+      </div>
+
+      <!-- Sentence context with blank -->
+      <div class="bg-gray-50 border-2 border-black rounded-xl p-5 mb-6 text-base sm:text-lg leading-relaxed">
+        <span id="sentence-before"></span>
+        <span class="inline-block border-b-4 border-dashed border-red-500 bg-red-50 px-3 py-1 font-bold text-red-600 rounded" id="current-blank">???</span>
+        <span id="sentence-after"></span>
+      </div>
+
+      <!-- Options Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6" id="options-container">
+        <!-- Dynamic Option Buttons -->
+      </div>
+
+      <div id="fill-feedback" class="hidden p-3 rounded-lg border-2 font-semibold text-center text-sm mb-4"></div>
+
+      <div class="flex justify-end">
+        <button id="btn-next-fill" onclick="nextFillQuestion()" class="mario-btn bg-yellow-400 hover:bg-yellow-500 text-black font-retro px-6 py-3 rounded-xl text-xs sm:text-sm hidden items-center gap-2">
+          <span>NEXT NOTE</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 3: REARRANGE ESSAYS ================= -->
+    <section id="stage-rearrange" class="mario-card w-full p-6 sm:p-8 rounded-2xl bg-white hidden">
+      <div class="bg-purple-600 text-white py-3 px-6 -mx-8 -mt-8 mb-6 border-b-4 border-black flex justify-between items-center">
+        <h2 class="font-retro text-sm sm:text-base"><i class="fa-solid fa-list-ol"></i> WORLD 1-3: ESSAY BUILDER</h2>
+        <span class="font-retro text-xs bg-yellow-400 text-black px-2 py-1 rounded">TOPIC <span id="essay-num">1</span>/8</span>
+      </div>
+
+      <!-- Essay Topic Header -->
+      <div class="mb-4">
+        <h3 id="essay-title" class="font-fun text-2xl text-purple-700 mb-1">Topic Title</h3>
+        <p class="text-xs text-gray-500 font-medium">Reorder the 5 paragraph chunks to construct a coherent ~120-word essay for Form 3 standard.</p>
+      </div>
+
+      <!-- Instructions & Actions -->
+      <div class="flex justify-between items-center mb-3">
+        <span class="text-xs font-bold text-gray-600"><i class="fa-solid fa-hand-pointer text-purple-600"></i> Click a sentence to select, then click another to swap positions:</span>
+        <button onclick="resetEssayOrder()" class="text-xs bg-gray-200 hover:bg-gray-300 font-bold px-3 py-1 rounded border border-black">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+      </div>
+
+      <!-- Sentence Blocks (Rearrange Container) -->
+      <div id="essay-blocks" class="space-y-3 mb-6">
+        <!-- Dynamically Generated Sentence Blocks -->
+      </div>
+
+      <div class="flex justify-between items-center">
+        <button onclick="checkEssayOrder()" class="mario-btn bg-green-500 hover:bg-green-600 text-white font-retro px-6 py-3 rounded-xl text-xs sm:text-sm inline-flex items-center gap-2">
+          <i class="fa-solid fa-check"></i>
+    <!-- ================= TEACHER DASHBOARD MODAL ================= -->
+    <div id="teacher-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+      <div class="mario-card bg-white w-full max-w-3xl rounded-2xl p-6 relative max-h-[90vh] flex flex-col">
+        <div class="flex justify-between items-center bg-purple-700 text-white p-4 -m-6 mb-4 rounded-t-xl border-b-4 border-black">
+          <h3 class="font-retro text-sm sm:text-base flex items-center gap-2">
+            <i class="fa-solid fa-graduation-cap text-yellow-300"></i> TEACHER RECORDS DASHBOARD
+          </h3>
+          <button onclick="toggleTeacherDashboard()" class="text-white hover:text-red-300 font-bold text-xl">&times;</button>
+        </div>
+
+        <div class="flex flex-wrap justify-between items-center my-2 gap-2 text-xs font-semibold">
+          <p class="text-gray-600">Track student quest completions and performance scores in real-time.</p>
+          <div class="flex gap-2">
+            <button onclick="clearStudentRecords()" class="bg-red-500 text-white px-3 py-1.5 rounded border border-black font-retro hover:bg-red-600">
+              <i class="fa-solid fa-trash"></i> CLEAR ALL
+            </button>
+          </div>
+        </div>
+
+        <!-- Student Records Table -->
+        <div class="overflow-y-auto flex-grow border-2 border-black rounded-xl bg-gray-50 mb-4">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-yellow-400 font-retro text-xs border-b-2 border-black sticky top-0">
+              <tr>
+                <th class="p-3">#</th>
+                <th class="p-3">Student Name</th>
+                <th class="p-3">Class</th>
+                <th class="p-3">Fill Score (15)</th>
+                <th class="p-3">Essay Score (8)</th>
+                <th class="p-3">Total Coins</th>
+              </tr>
+            </thead>
+            <tbody id="records-table-body" class="divide-y divide-gray-300">
+              <!-- Dynamic Rows inserted here -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-right">
+          <button onclick="toggleTeacherDashboard()" class="mario-btn bg-gray-600 hover:bg-gray-700 text-white font-retro text-xs px-5 py-2.5 rounded-lg">
+            CLOSE RECORDS
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER ATTRIBUTION -->
+  <footer class="max-w-4xl mx-auto w-full mt-6 text-center">
+    <div class="mario-card bg-white p-3 rounded-xl border-2 border-black inline-block">
+      <p class="font-retro text-xs text-gray-800 flex items-center gap-2 justify-center">
+        <i class="fa-solid fa-heart text-red-500"></i>
+        Designed by <span class="text-red-600 font-bold">Teacher Faqihah</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- AUDIO SYNTH (Web Audio API for Retro Sound Effects) -->
+  <script>
+    // ... existing audio code ...
+    // GAME STATE & DATA
+    let gameState = {
+      playerName: '',
+      playerClass: '',
+      score: 0,
+      fillCorrectCount: 0,
+      essayCorrectCount: 0,
+      currentFillIdx: 0,
+      currentEssayIdx: 0
+    };
+
+    // Teacher records local storage array
+    let teacherRecords = [];
+
+    // Stage 2 Questions: 15 Note Expansion Questions for Form 3
+    const fillQuestions = [
+      {
+        notes: "receive gift -> last birthday -> brand new smartphone",
+        before: "On my fourteenth birthday, I was thrilled when I ",
+        after: " from my parents.",
+        options: [
+          "received a brand new smartphone as a gift",
+          "receives a brand new smartphone as a gift",
+          "receiving brand new smartphone gift",
+          "receive brand new smartphone"
+        ],
+        correct: 0,
+        explanation: "Past simple tense 'received' is required because it refers to a completed past event ('last birthday')."
+      },
+      {
+        notes: "play badminton -> weekend -> local community centre",
+        before: "Every Saturday afternoon, my brother and I enjoy ",
+        after: " nearby our house.",
+        options: [
+          "played badminton at the local community centre",
+          "playing badminton at the local community centre",
+          "plays badminton inside local community centre",
+          "play badminton to local community centre"
+        ],
+        correct: 1,
+        explanation: "The verb 'enjoy' is followed by a gerund ('playing'), and 'at' is the correct preposition for the location."
+      },
+      {
+        notes: "suddenly -> hear loud crash -> look outside",
+        before: "While I was studying in my room, ",
+        after: " and immediately ran to the window to look outside.",
+        options: [
+          "I suddenly heard a loud crash",
+          "I sudden hear loud crash",
+          "I am hearing a loud crash suddenly",
+          "I hear loud crash suddenly"
+        ],
+        correct: 0,
+        explanation: "'Suddenly heard' uses the past simple to interrupt a continuous action ('was studying')."
+      },
+      {
+        notes: "useful tool -> online studies -> contact friends",
+        before: "Having a smartphone is very beneficial because it is a ",
+        after: " and staying connected with schoolmates.",
+        options: [
+          "useful tool for online studies",
+          "use tool for online study",
+          "user tool in online study",
+          "usefully tool for study online"
+        ],
+        correct: 0,
+        explanation: "'Useful tool for' correctly expands the prompt using adjective + noun + preposition."
+      },
+      {
+        notes: "ambulance arrived -> paramedics treat victim -> send hospital",
+        before: "Within ten minutes, the ",
+        after: " to the nearest hospital for urgent treatment.",
+        options: [
+          "ambulance arrived and paramedics treated the victim before sending him",
+          "ambulance arrive and paramedic treat victim and send him",
+          "ambulance arriving and paramedics treat victim send him",
+          "ambulance was arrive and paramedics treating victim to send"
+        ],
+        correct: 0,
+        explanation: "Proper sequence of past actions requires consistent past tense verbs ('arrived', 'treated')."
+      },
+      {
+        notes: "heavy rain -> flash flood -> trap residents",
+        before: "Due to the continuous ",
+        after: " in their housing area.",
+        options: [
+          "heavy rain, a sudden flash flood trapped many residents",
+          "heavily rain, flash flood trapping many resident",
+          "rains heavy, flash flood traps resident",
+          "heavy rain flash flood were trap residents"
+        ],
+        correct: 0,
+        explanation: "'Heavy rain' is a noun phrase, followed by a past simple verb clause 'trapped'."
+      },
+      {
+        notes: "organise clean-up -> school compound -> Saturday morning",
+        before: "The Eco Club decided to ",
+        after: " to make the school environment cleaner.",
+        options: [
+          "organise a clean-up activity at the school compound on Saturday morning",
+          "organising clean-up inside school compound in Saturday morning",
+          "organised clean-up activity to school compound at Saturday morning",
+          "organise cleaning up at school compound during Saturday morning"
+        ],
+        correct: 0,
+        explanation: "Infinitive verb 'to organise' with proper prepositions 'at' (location) and 'on' (day)."
+      },
+      {
+        notes: "spot stray kitten -> under bush -> meowing helplessly",
+        before: "As Ali was walking home, he ",
+        after: " near the roadside.",
+        options: [
+          "spotted a helpless stray kitten under a bush meowing",
+          "spot stray kitten under bush meow",
+          "was spot a stray kitten under bush meowing",
+          "spotted stray kitten under bush was meow"
+        ],
+        correct: 0,
+        explanation: "Past tense action 'spotted' followed by descriptive participle 'meowing'."
+      },
+      {
+        notes: "practice daily -> improve stamina -> win tournament",
+        before: "By ",
+        after: ", the school football team managed to win the championship.",
+        options: [
+          "practising daily to improve their stamina",
+          "practised daily for improve stamina",
+          "practice daily and improving stamina",
+          "practices daily to improving stamina"
+        ],
+        correct: 0,
+        explanation: "Preposition 'By' is followed by a gerund 'practising' and infinitive 'to improve'."
+      },
+      {
+        notes: "power failure -> dark room -> light candle",
+        before: "During the sudden ",
+        after: " so that we could see in the dark room.",
+        options: [
+          "power failure, my father lit a candle",
+          "power failed, my father lighting candle",
+          "power failing, my father lights candle",
+          "power failure, my father is light candle"
+        ],
+        correct: 0,
+        explanation: "Noun phrase 'power failure' paired with simple past verb 'lit'."
+      },
+      {
+        notes: "prepare delicious meal -> mother -> celebrate birthday",
+        before: "Last night, my ",
+        after: " for our family to celebrate my brother's birthday.",
+        options: [
+          "mother prepared a delicious meal",
+          "mother prepares delicious meal",
+          "mother preparing a delicious meal",
+          "mother was prepare delicious meal"
+        ],
+        correct: 0,
+        explanation: "Time marker 'Last night' indicates past tense verb 'prepared'."
+      },
+      {
+        notes: "cautious -> cross road -> look left and right",
+        before: "Pedestrians must always be ",
+        after: " before stepping onto the street.",
+        options: [
+          "cautious and look left and right when crossing the road",
+          "cautiously and look left right when cross road",
+          "caution and looking left right to cross road",
+          "cautious looking left right while cross road"
+        ],
+        correct: 0,
+        explanation: "Adjective 'cautious' and temporal preposition clause 'when crossing'."
+      },
+      {
+        notes: "encourage students -> read books -> expand vocabulary",
+        before: "Teachers constantly ",
+        after: " because it helps expand their vocabulary.",
+        options: [
+          "encourage students to read more books",
+          "encouraging students read books",
+          "encouraged student for reading books",
+          "encourages students read more books"
+        ],
+        correct: 0,
+        explanation: "Present simple habit verb 'encourage' followed by object + infinitive ('to read')."
+      },
+      {
+        notes: "hear loud noise -> kitchen -> drop plate",
+        before: "We were startled when we ",
+        after: " after someone accidentally dropped a ceramic plate.",
+        options: [
+          "heard a loud noise from the kitchen",
+          "hear loud noise in kitchen",
+          "are hearing loud noise from kitchen",
+          "were heard a loud noise at kitchen"
+        ],
+        correct: 0,
+        explanation: "Past simple 'heard' matches the past context of 'dropped'."
+      },
+      {
+        notes: "thankful -> supportive friends -> solve problem",
+        before: "I felt extremely ",
+        after: " when I was facing difficulties with my studies.",
+        options: [
+          "thankful to have supportive friends who helped me solve the problem",
+          "thanking to have support friends who help solve problem",
+          "thankful for having support friend to solving problem",
+          "thanks to have supportive friends who solving problem"
+        ],
+        correct: 0,
+        explanation: "Adjective 'thankful' with infinitive structure and relative clause 'who helped'."
+      }
+    ];
+
+    // Stage 3 Essays: 8 Topics (~120 words each, split into 5 orderable paragraph chunks)
+    const essaysData = [
+      {
+        title: "1. My First Smartphone",
+        correctOrder: [0, 1, 2, 3, 4],
+        chunks: [
+          "On my fourteenth birthday, my parents surprised me with a sleek black smartphone as a reward for achieving excellent results in my exams.",
+          "I was overjoyed because I had been wishing for my own phone for a very long time.",
+          "The phone has proven to be extremely useful, especially for searching study materials and communicating with classmates for group projects.",
+          "However, my parents set strict guidelines, allowing me to use it only after finishing all my homework and revisions.",
+          "All in all, I am very grateful for this wonderful gift and I promise to use it responsibly without neglecting my studies."
+        ]
+      },
+      {
+        title: "2. My Favourite Sport",
+        correctOrder: [0, 1, 2, 3, 4],
+        chunks: [
+          "Among all the physical activities I have tried, badminton is undeniably my absolute favourite sport.",
+          "I play badminton every weekend at the neighborhood court together with my elder brother and close friends.",
+          "Playing badminton regularly helps me stay physically fit, improves my reflexes, and reduces stress after a busy school week.",
+          "My idol is Datuk Lee Chong Wei, and watching his legendary matches inspires me to train harder and improve my smash technique.",
+          "In conclusion, badminton is not only an exciting pastime but also a great way to build strong friendships and maintain good health."
+        ]
+      },
+      {
+        title: "3. An Unforgettable Accident",
+        correctOrder: [0, 1, 2, 3, 4],
+        chunks: [
+          "Last month, while walking home from school, I witnessed a terrifying road accident near the busy junction.",
+          "A motorcyclist was riding at high speed when a car suddenly turned out from a side lane without signaling.",
+          "The car hit the motorcycle, causing the rider to skid across the asphalt road and suffer minor injuries.",
+          "Without hesitation, I immediately dialed 999 to request an ambulance while several passers-by stopped to assist the injured victim.",
+          "This frightening incident taught me the vital importance of remaining cautious and defensive while on the road."
+        ]
+      },
+      {
+        title: "4. Rescuing a Helpless Stray Animal",
+        correctOrder: [0, 1, 2, 3, 4],
+        chunks: [
+          "Last Tuesday afternoon, while returning from tuition class, I heard faint meowing sounds coming from a roadside drain.",
+          "When I peered inside, I discovered a tiny kitten trapped in dirty mud, shivering cold and unable to climb out.",
+          "I carefully reached down and scooped the little kitten up, wrapping it in my handkerchief to keep it warm.",
+          "I brought the kitten home, cleaned it gently with warm water, and fed it a small bowl of warm milk.",
+          "My parents agreed to let me adopt the kitten, and caring for it has taught me compassion and responsibility toward animals."
+        ]
+      },
+      {
+        title: "5. My Dream Holiday in Langkawi",
+        correctOrder: [0, 1, 2, 3, 4],
+        chunks: [
+          "During the last school holidays, my family and I traveled to Langkawi Island for an exciting three-day vacation.",
+          "We stayed at a cozy beach resort facing the crystal-clear ocean waters and soft white sands.",
+          "On the second day, we rode the famous Langkawi Cable Car to the top of Mount Mat Cincang to enjoy breathtaking panorama views.",
+          "We also bought local chocolates and souvenirs at the duty-free shops in Kuah Town before heading back home.",
+          "It was truly an unforgettable holiday trip filled with joyous memories that my family will cherish for many years."
+        ]
+      },
+      {
+        title: "6. A Meaningful School Clean-Up Day",
+        correctOrder: [0, 1, 2, 3, 4],
+        chunks: [
+          "Last Saturday, our school organised a massive Gotong-Royong activity to create a cleaner learning environment for all students.",
+          "Early in the morning, students gathered at the school hall equipped with brooms, paintbrushes, and rubbish bags.",
+          "My class was tasked with repainting the faded walls of our classroom and sweeping the fallen leaves in the courtyard.",
+          "We worked cooperatively together, singing songs and chatting while making the entire school compound look spotless and cheerful.",
+          "By noon, the school looked brand new, and we felt extremely proud of our teamwork and hard work."
+        ]
+      },
+      {
+        title: "7. An Unexpected Power Outage",
+        correctOrder: [0, 1, 2, 3, 4],
+        chunks: [
+          "It was a stormy Friday night when a sudden power outage plunged our entire neighborhood into pitch darkness.",
+          "The heavy thunderstorm had caused a major blackout, leaving our family without electricity or air conditioning.",
+          "My father quickly lit scented candles and brought out bright battery-powered lanterns to illuminate the living room.",
+          "Instead of browsing on our smartphones, we sat together around the dining table playing board games and sharing funny stories.",
+          "Although it was inconvenient, the blackout turned out to be a special bonding experience that brought our family closer."
+        ]
+      },
+      {
+        title: "8. My Best Friend's Surprise Birthday Party",
+        correctOrder: [0, 1, 2, 3, 4],
+        chunks: [
+          "Last weekend, my classmates and I planned a surprise birthday party for our best friend, Danish, at a local cafe.",
+          "We secretly decorated the private room with colorful balloons, banners, and a delicious chocolate birthday cake.",
+          "When Danish arrived under the pretense of returning a textbook, everyone popped out from behind the counter shouting 'Surprise!'",
+          "Danish was completely stunned and thrilled, with a giant smile across his face as we sang the birthday song.",
+          "We spent the rest of the evening eating delicious food, taking photos, and celebrating our unbreakable friendship."
+        ]
+      }
+    ];
+
+    let currentEssayState = [];
+    let selectedBlockIdx = null;
+
+    // GAME NAVIGATION & LOGIC
+    function startQuest() {
+      const nameInput = document.getElementById('player-name').value.trim();
+      const classSelect = document.getElementById('player-class').value;
+
+      if (!nameInput) {
+        alert('Please enter your Hero Name to start!');
+        return;
+      }
+      if (!classSelect) {
+        alert('Please select your Class to start!');
+        return;
+      }
+
+      gameState.playerName = nameInput;
+      gameState.playerClass = classSelect;
+      gameState.score = 0;
+      gameState.fillCorrectCount = 0;
+      gameState.essayCorrectCount = 0;
+      gameState.currentFillIdx = 0;
+      gameState.currentEssayIdx = 0;
+
+      document.getElementById('hud-name').innerText = `HERO: ${nameInput.toUpperCase()}`;
+      document.getElementById('hud-class').innerText = `CLASS: ${classSelect}`;
+      document.getElementById('hud-score').innerText = '0';
+
+      playSound('coin');
+
+      // Switch to Stage 2
+      document.getElementById('stage-welcome').classList.add('hidden');
+      document.getElementById('stage-fill').classList.remove('hidden');
+      loadFillQuestion();
+    }
+
+    // STAGE 2: Fill in blanks logic
+    function loadFillQuestion() {
+      const q = fillQuestions[gameState.currentFillIdx];
+      document.getElementById('fill-idx').innerText = gameState.currentFillIdx + 1;
+      document.getElementById('fill-notes').innerText = q.notes;
+      document.getElementById('sentence-before').innerText = q.before;
+      document.getElementById('sentence-after').innerText = q.after;
+      document.getElementById('current-blank').innerText = " [ ? ] ";
+      
+      const feedbackEl = document.getElementById('fill-feedback');
+      feedbackEl.classList.add('hidden');
+
+      const btnNext = document.getElementById('btn-next-fill');
+      btnNext.classList.add('hidden');
+      btnNext.classList.remove('inline-flex');
+
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "mario-btn bg-white hover:bg-yellow-100 text-left p-4 rounded-xl text-sm font-semibold border-2 border-black flex items-start gap-3 cursor-pointer";
+        btn.innerHTML = `
+          <span class="bg-yellow-400 text-black font-retro text-xs px-2 py-1 rounded border border-black">${String.fromCharCode(65 + idx)}</span>
+          <span class="flex-grow">${opt}</span>
+        `;
+        btn.onclick = () => selectFillOption(idx);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectFillOption(selectedIdx) {
+      const q = fillQuestions[gameState.currentFillIdx];
+      const feedbackEl = document.getElementById('fill-feedback');
+      const optionsContainer = document.getElementById('options-container');
+      const optionButtons = optionsContainer.children;
+
+      // Disable all option buttons
+      for (let btn of optionButtons) {
+        btn.disabled = true;
+        btn.classList.add('opacity-70', 'cursor-not-allowed');
+      }
+
+      if (selectedIdx === q.correct) {
+        playSound('coin');
+        gameState.score += 100;
+        gameState.fillCorrectCount++;
+        document.getElementById('hud-score').innerText = gameState.score;
+        document.getElementById('current-blank').innerText = ` ${q.options[selectedIdx]} `;
+        document.getElementById('current-blank').className = "inline-block bg-green-200 text-green-900 border-b-4 border-green-600 px-3 py-1 font-bold rounded";
+        
+        optionButtons[selectedIdx].classList.remove('bg-white', 'opacity-70');
+        optionButtons[selectedIdx].classList.add('bg-green-100', 'border-green-600', 'text-green-900');
+
+        feedbackEl.className = "p-3 rounded-lg border-2 border-green-500 bg-green-50 font-semibold text-center text-sm mb-4 text-green-800";
+        feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check text-green-600"></i> CORRECT! +100 COINS<br><span class="text-xs font-normal">${q.explanation}</span>`;
+      } else {
+        playSound('wrong');
+        optionButtons[selectedIdx].classList.remove('bg-white', 'opacity-70');
+        optionButtons[selectedIdx].classList.add('bg-red-100', 'border-red-600', 'text-red-900');
+        
+        optionButtons[q.correct].classList.remove('bg-white', 'opacity-70');
+        optionButtons[q.correct].classList.add('bg-green-100', 'border-green-600');
+
+        feedbackEl.className = "p-3 rounded-lg border-2 border-red-500 bg-red-50 font-semibold text-center text-sm mb-4 text-red-800";
+        feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-600"></i> INCORRECT! <br><span class="text-xs font-normal">${q.explanation}</span>`;
+      }
+
+      feedbackEl.classList.remove('hidden');
+      const btnNext = document.getElementById('btn-next-fill');
+      btnNext.classList.remove('hidden');
+      btnNext.classList.add('inline-flex');
+    }
+
+    function nextFillQuestion() {
+      gameState.currentFillIdx++;
+      if (gameState.currentFillIdx < fillQuestions.length) {
+        loadFillQuestion();
+      } else {
+        // Switch to Stage 3
+        document.getElementById('stage-fill').classList.add('hidden');
+        document.getElementById('stage-rearrange').classList.remove('hidden');
+        loadEssayQuestion();
+      }
+    }
+
+    // STAGE 3: Rearrange Essays logic
+    function loadEssayQuestion() {
+      const essay = essaysData[gameState.currentEssayIdx];
+      document.getElementById('essay-num').innerText = gameState.currentEssayIdx + 1;
+      document.getElementById('essay-title').innerText = essay.title;
+
+      // Scramble chunks deterministically
+      let indices = essay.chunks.map((_, i) => i);
+      indices = indices.reverse();
+      currentEssayState = indices.map(i => essay.chunks[i]);
+      selectedBlockIdx = null;
+
+      document.getElementById('btn-next-essay').classList.add('hidden');
+      document.getElementById('btn-next-essay').classList.remove('inline-flex');
+
+      renderEssayBlocks();
+    }
+
+    function renderEssayBlocks() {
+      const container = document.getElementById('essay-blocks');
+      container.innerHTML = '';
+
+      currentEssayState.forEach((text, idx) => {
+        const div = document.createElement('div');
+        const isSelected = selectedBlockIdx === idx;
+        
+        div.className = `mario-btn p-4 rounded-xl border-2 border-black flex items-center justify-between cursor-pointer transition-all ${
+          isSelected ? 'bg-purple-200 ring-4 ring-purple-500 scale-[1.01]' : 'bg-gray-50 hover:bg-yellow-50'
+        }`;
+        
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="font-retro text-xs bg-purple-600 text-white w-6 h-6 flex items-center justify-center rounded-full">${idx + 1}</span>
+            <p class="text-sm sm:text-base text-gray-800 font-medium">${text}</p>
+          </div>
+          <div class="text-purple-600 font-bold ml-2">
+            <i class="fa-solid ${isSelected ? 'fa-circle-check text-lg' : 'fa-arrows-up-down'}"></i>
+          </div>
+        `;
+
+        div.onclick = () => handleBlockClick(idx);
+        container.appendChild(div);
+      });
+    }
+
+    function handleBlockClick(idx) {
+      if (selectedBlockIdx === null) {
+        selectedBlockIdx = idx;
+      } else if (selectedBlockIdx === idx) {
+        selectedBlockIdx = null;
+      } else {
+        // Swap elements
+        const temp = currentEssayState[selectedBlockIdx];
+        currentEssayState[selectedBlockIdx] = currentEssayState[idx];
+        currentEssayState[idx] = temp;
+        selectedBlockIdx = null;
+        playSound('coin');
+      }
+      renderEssayBlocks();
+    }
+
+    function resetEssayOrder() {
+      loadEssayQuestion();
+    }
+
+    function checkEssayOrder() {
+      const essay = essaysData[gameState.currentEssayIdx];
+      let isCorrect = true;
+
+      for (let i = 0; i < essay.chunks.length; i++) {
+        if (currentEssayState[i] !== essay.chunks[i]) {
+          isCorrect = false;
+          break;
+        }
+      }
+
+      if (isCorrect) {
+        playSound('win');
+        gameState.score += 200;
+        gameState.essayCorrectCount++;
+        document.getElementById('hud-score').innerText = gameState.score;
+        
+        alert('✨ EXCELLENT! Essay structure is perfectly ordered! +200 COINS');
+        
+        const btnNext = document.getElementById('btn-next-essay');
+        btnNext.classList.remove('hidden');
+        btnNext.classList.add('inline-flex');
+      } else {
+        playSound('wrong');
+        alert('❌ The paragraph order is not quite right yet. Keep rearranging the sequence!');
+      }
+    }
+
+    function nextEssay() {
+      gameState.currentEssayIdx++;
+      if (gameState.currentEssayIdx < essaysData.length) {
+        loadEssayQuestion();
+      } else {
+        showVictoryScreen();
+      }
+    }
+
+    function showVictoryScreen() {
+      playSound('win');
+      document.getElementById('stage-rearrange').classList.add('hidden');
+      document.getElementById('stage-victory').classList.remove('hidden');
+
+      document.getElementById('final-name').innerText = gameState.playerName;
+      document.getElementById('final-class').innerText = gameState.playerClass;
+      document.getElementById('final-score').innerText = gameState.score;
+
+      let rank = "ESSAY NOVICE";
+      if (gameState.score >= 2800) rank = "SUPER ESSAY MASTER (GRAND CHAMPION)";
+      else if (gameState.score >= 2000) rank = "EXPERT NOTE EXPANDER";
+      else if (gameState.score >= 1200) rank = "ADVANCED WRITER";
+      
+      document.getElementById('final-rank').innerText = rank;
+
+      // Save student record into Teacher Records
+      saveStudentRecord();
+    }
+
+    // TEACHER DASHBOARD LOGIC
+    function toggleTeacherDashboard() {
+      const modal = document.getElementById('teacher-modal');
+      const isHidden = modal.classList.contains('hidden');
+      if (isHidden) {
+        renderTeacherRecords();
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function saveStudentRecord() {
+      const record = {
+        name: gameState.playerName,
+        class: gameState.playerClass,
+        fillScore: `${gameState.fillCorrectCount}/15`,
+        essayScore: `${gameState.essayCorrectCount}/8`,
+        totalScore: gameState.score,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      teacherRecords.push(record);
+    }
+
+    function renderTeacherRecords() {
+      const tbody = document.getElementById('records-table-body');
+      tbody.innerHTML = '';
+
+      if (teacherRecords.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-4 text-center text-gray-500 italic">
+              No student records available yet. Complete the quest to view scores here!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      teacherRecords.forEach((rec, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = idx % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+        tr.innerHTML = `
+          <td class="p-3 font-bold">${idx + 1}</td>
+          <td class="p-3 font-semibold text-gray-900">${rec.name}</td>
+          <td class="p-3 text-blue-600 font-semibold">${rec.class}</td>
+          <td class="p-3 text-green-700 font-bold">${rec.fillScore}</td>
+          <td class="p-3 text-purple-700 font-bold">${rec.essayScore}</td>
+          <td class="p-3 font-retro text-yellow-600 font-bold">${rec.totalScore} pts</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function clearStudentRecords() {
+      if (confirm("Are you sure you want to clear all student performance records?")) {
+        teacherRecords = [];
+        renderTeacherRecords();
+      }
+    }
+  </script>
+</body>
+</html>
